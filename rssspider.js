@@ -1,14 +1,6 @@
 var FeedParser = require('feedparser');
 var request = require('request'); // for fetching the feed
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'root',
-  database : 'rss'
-});
-
-connection.connect();
+var query = require('./database_connect');
 
 // url ='http://36kr.com/feed'
 // url ='http://news.163.com/special/00011K6L/rss_gn.xml' //无效
@@ -61,7 +53,7 @@ feedparser.on('readable', function () {
         guid: item.guid
     }
     //插入数据
-    connection.query('INSERT INTO articles SET ?', article, (err, res) => {
+    query('INSERT INTO articles SET ?', article, (err, res) => {
       if(err) throw err;
       //输出插入结果
       console.log('Last insert ID:', res.insertId);
