@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>get articles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <!-- <script src="main.js"></script> -->
+</head>
+<body>
+    <button id="foo">获取新文章</button>
+    <script>
+        var p = document.getElementById("foo");
+        p.onclick = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/getpage', true);
+            console.log('OPENED', xhr.readyState); 
+        }
+    </script>
+</body>
+</html>
