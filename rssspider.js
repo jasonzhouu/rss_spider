@@ -4,16 +4,21 @@
 
 var FeedParser = require('feedparser');
 var request = require('request'); // for fetching the feed
-var query = require('./database_connect');
+var saveArticle = require('./database_connect');
+var crawler = require('./crawler');
 
 // url ='http://36kr.com/feed'
-// url ='http://news.163.com/special/00011K6L/rss_gn.xml' //无效
 // url='http://news.qq.com/newsgn/rss_newsgn.xml' //有效
-// url = 'http://news.baidu.com/n?cmd=1&class=civilnews&tn=rss' //无效
 // url = "http://tech.163.com/special/00091JPQ/techimportant.xml" //有效
-// url="http://news.ifeng.com/rss/index.xml" //无效
+var url ='http://news.163.com/special/00011K6L/rss_newstop.xml' //有效
 
-module.exports = function(url) {
+// async function wait_for_result (url, article) {
+//   var text = await crawler(url)
+//   article.content = text
+//   // console.log(text)
+// }
+
+function rss_spider (url) {
   var req = request(url)
   var feedparser = new FeedParser();
   
@@ -37,37 +42,34 @@ module.exports = function(url) {
   });
   
   feedparser.on('readable', function () {
-    // This is where the action is!
     var stream = this; // `this` is `feedparser`, which is a stream
     var meta = this.meta; // **NOTE** the "meta" is always available in the context of the feedparser instance
     var item;
   
     while (item = stream.read()) {
-      for (var i in item) {
-        // console.log(i)
-          console.log(item.guid)
-      }
-      // console.log(item)
-
-
+      let guid = item.guid
+      let newDate = new Date()
+      let timestamp = newDate.toLocaleDateString()
+      
       //  article object 是数据库存数据的配置
       let article = {
-          title: item.title,
-          content: item.description,
-          publish_time: item.pubdate,
-          publish_source: item.source,
-          guid: item.guid
+        title: item.title,
+        content: item.description,
+        publish_time: item.pubdate,
+        publish_source: item.source,
+        create_at: timestamp,
+        // guid: guid,
       }
 
-      
-      //插入数据
-      query('INSERT INTO articles SET ?', article, (err, res) => {
-        if(err) throw err;
-        //输出插入结果
-        console.log('Last insert ID:', res.insertId);
-      });
-
+      // wait_for_result(url, article)
+      crawler(url).then((result)=>{
+        console.log(result)
+        article.content = result
+        saveArticle(article)
+      })
     }
 
   });
 }
+rss_spider(url)
+module.exports = rss_spider

@@ -8,4 +8,12 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-module.exports = connection.query
+function saveArticle (article) {
+  query('INSERT INTO articles SET ?', article, (err, res) => {
+    if(err) throw err;
+    //输出插入结果
+    console.log('Last insert ID:', res.insertId);
+  })
+}
+
+module.exports = saveArticle
