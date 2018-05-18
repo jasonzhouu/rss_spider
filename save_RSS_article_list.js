@@ -4,19 +4,9 @@
 
 var FeedParser = require('feedparser');
 var request = require('request'); // for fetching the feed
-var saveArticle = require('./database_connect');
-var crawler = require('./crawler');
+var save_article_to_database = require('./save_article_to_database');
 
-// url ='http://36kr.com/feed'
-// url='http://news.qq.com/newsgn/rss_newsgn.xml' //有效
-// url = "http://tech.163.com/special/00091JPQ/techimportant.xml" //有效
 var url ='http://news.163.com/special/00011K6L/rss_newstop.xml' //有效
-
-// async function wait_for_result (url, article) {
-//   var text = await crawler(url)
-//   article.content = text
-//   // console.log(text)
-// }
 
 function rss_spider (url) {
   var req = request(url)
@@ -42,34 +32,30 @@ function rss_spider (url) {
   });
   
   feedparser.on('readable', function () {
+    console.log('data get ***')
     var stream = this; // `this` is `feedparser`, which is a stream
-    var meta = this.meta; // **NOTE** the "meta" is always available in the context of the feedparser instance
     var item;
   
     while (item = stream.read()) {
-      let guid = item.guid
+      console.log('while')
       let newDate = new Date()
       let timestamp = newDate.toLocaleDateString()
       
       //  article object 是数据库存数据的配置
       let article = {
         title: item.title,
-        content: item.description,
+        description: item.description,
+        content: null,
         publish_time: item.pubdate,
         publish_source: item.source,
-        create_at: timestamp,
-        // guid: guid,
+        guid: item.guid,
+        created_at: timestamp,
       }
-
-      // wait_for_result(url, article)
-      crawler(url).then((result)=>{
-        console.log(result)
-        article.content = result
-        saveArticle(article)
-      })
+      
+      save_article_to_database(article)
     }
-
-  });
+    console.log('data get ===')
+  })
 }
 rss_spider(url)
 module.exports = rss_spider
