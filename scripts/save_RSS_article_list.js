@@ -2,13 +2,22 @@
  * 从 rss 源获取最新的文章列表和 guid
 */
 
-var FeedParser = require('feedparser');
-var request = require('request'); // for fetching the feed
-var save_article_to_database = require('./save_article_to_database');
+var FeedParser = require('feedparser')
+var request = require('request')
+var connection = require('./connection')
+connection.connect()
 
-var url ='http://news.163.com/special/00011K6L/rss_newstop.xml' //有效
+function save_article_to_database (article) {
+  connection.query('INSERT INTO articles SET ?', article, (err, res) => {
+    if(err) throw err;
+    //输出插入结果
+    console.log('Last insert ID:', res.insertId);
+  })
+}
 
-function rss_spider (url) {
+var url ='http://news.163.com/special/00011K6L/rss_newstop.xml' //163 rss 源
+
+function save_RSS_article_list (url) {
   var req = request(url)
   var feedparser = new FeedParser();
   
@@ -57,5 +66,6 @@ function rss_spider (url) {
     console.log('data get ===')
   })
 }
-rss_spider(url)
-module.exports = rss_spider
+
+save_RSS_article_list(url)
+module.exports = save_RSS_article_list
