@@ -37,7 +37,7 @@ function get_full_content (guid) {
                 // save_content_to_database(1, content)
                 resolve(content)
             } else {
-                let errReason = 'reject guid: ' + guid + ' err: ' + err
+                let errReason = 'reject full content request, guid: ' + guid + ' err: ' + err
                 reject(errReason)
             }
         })

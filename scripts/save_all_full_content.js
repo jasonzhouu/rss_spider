@@ -16,14 +16,14 @@ function saveContent(id, content, connection) {
             // throw err;
         }
         // console.log('Last insert ID:', res.insertId);
-        console.log('Last insert ID:', id);
+        console.log('Last insert item ID:', id);
     })
 }
 
 function deleteItem(id) {
     connection.query('DELETE FROM articles WHERE id = ?', id, (err, res)=>{
         if(err) console.log(err)
-        console.log('delete item id: ', id)
+        console.log('delete item whose content is null, id: ', id)
     })
 }
 
@@ -53,7 +53,7 @@ function save_all_full_content () {
                 }
             }).catch((reason)=>{
                 deleteItem(id)
-                console.log('reject reason: ', reason)
+                console.log(reason)
             })
         }
     })
