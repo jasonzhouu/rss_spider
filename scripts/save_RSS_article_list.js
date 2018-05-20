@@ -4,6 +4,7 @@
 
 var FeedParser = require('feedparser')
 var request = require('request')
+var my_emitter = require('./my_emitter')
 var connection = require('./connection')
 connection.connect()
 
@@ -19,7 +20,8 @@ var url ='http://news.163.com/special/00011K6L/rss_newstop.xml' //163 rss 源
 
 function save_RSS_article_list (url) {
   var req = request(url)
-  var feedparser = new FeedParser();
+  var feedparser = new FeedParser()
+  var count = 1
   
   req.on('error', function (error) {
     // handle any request errors
@@ -41,12 +43,12 @@ function save_RSS_article_list (url) {
   });
   
   feedparser.on('readable', function () {
-    console.log('data get ***')
+    count++
+    if(count%10==0) my_emitter.emit('enought_data')
     var stream = this; // `this` is `feedparser`, which is a stream
     var item;
   
     while (item = stream.read()) {
-      console.log('while')
       let newDate = new Date()
       let timestamp = newDate.toLocaleDateString()
       
@@ -63,9 +65,8 @@ function save_RSS_article_list (url) {
       
       save_article_to_database(article)
     }
-    console.log('data get ===')
   })
 }
 
-save_RSS_article_list(url)
+// save_RSS_article_list(url)
 module.exports = save_RSS_article_list
