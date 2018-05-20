@@ -6,7 +6,6 @@ var FeedParser = require('feedparser')
 var request = require('request')
 var my_emitter = require('./my_emitter')
 var connection = require('./connection')
-connection.connect()
 
 function save_article_to_database (article) {
   connection.query('INSERT INTO articles SET ?', article, (err, res) => {
@@ -15,8 +14,6 @@ function save_article_to_database (article) {
     console.log('Last insert ID:', res.insertId);
   })
 }
-
-var url ='http://news.163.com/special/00011K6L/rss_newstop.xml' //163 rss 源
 
 function save_RSS_article_list (url) {
   var req = request(url)
@@ -68,5 +65,4 @@ function save_RSS_article_list (url) {
   })
 }
 
-// save_RSS_article_list(url)
 module.exports = save_RSS_article_list
