@@ -7,19 +7,19 @@
 var connection = require('./connection')
 var get_full_content = require('./get_full_content')
 
-function saveContent(id, content, connection) {
+function saveContent(id, content) {
     connection.query('UPDATE articles SET content = ? WHERE id = ?', [content, id], (err, res)=>{
         if(err) {
-            console.log(err)
+            console.log("update err", err)
         }
-        console.log('Last insert item ID:', res.insertId);
+        console.log('Last insert full content ID:', res.insertId);
     })
 }
 
 function deleteItem(id) {
     connection.query('DELETE FROM articles WHERE id = ?', id, (err, res)=>{
         if(err) console.log(err)
-        console.log('delete item whose content is null, id: ', id)
+        // console.log('delete item whose content is null, id: ', id)
     })
 }
 
@@ -33,22 +33,16 @@ function save_full_content () {
             let guid = res[key].guid
             get_full_content(guid).then((content)=>{
                 // resolve result
-                console.log('length of content: ', content.length)
                 // if content.length is too short, it means the content is not proper or is empty
                 if(content.length<1000) {
                     deleteItem(id)
                 } else {
                     // if conten.lenght is long enough, then save content to database
-                    connection.query('UPDATE articles SET content = ? WHERE id = ?', [content, id], (err, res)=>{
-                        if(err) {
-                            console.log("update err", err)
-                        }
-                        console.log('Last insert full content ID:', id)
-                    })
+                    saveContent(id, content)
                 }
             }).catch((reason)=>{
                 deleteItem(id)
-                console.log(reason)
+                // console.log(reason)
             })
         }
     })

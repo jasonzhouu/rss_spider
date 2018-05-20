@@ -11,7 +11,7 @@ function save_article_to_database(article) {
   connection.query('INSERT INTO articles SET ?', article, (err, res) => {
     if(err) throw err;
     //输出插入结果
-    console.log('Last insert item ID:', res.insertId)
+    // console.log('Last insert item ID:', res.insertId)
     my_emitter.emit('new_article')
   })
 }
@@ -20,7 +20,7 @@ function check_and_save(article) {
   connection.query('select id from articles where guid = ?', article.guid, (err, res)=>{
     // if exists
     if(res[0]) {
-      console.log(`${res[0].id} article already exists`)
+      // console.log(`${res[0].id} article already exists`)
     }
     // if not exists
     else save_article_to_database(article)
