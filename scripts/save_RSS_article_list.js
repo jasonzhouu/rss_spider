@@ -11,7 +11,8 @@ function save_article_to_database(article) {
   connection.query('INSERT INTO articles SET ?', article, (err, res) => {
     if(err) throw err;
     //输出插入结果
-    console.log('Last insert full content ID:', res.insertId);
+    console.log('Last insert item ID:', res.insertId)
+    my_emitter.emit('new_article')
   })
 }
 
@@ -30,7 +31,6 @@ function check_and_save(article) {
 function save_RSS_article_list (url) {
   var req = request(url)
   var feedparser = new FeedParser()
-  var count = 1
   
   req.on('error', function (error) {
     // handle any request errors
@@ -52,8 +52,6 @@ function save_RSS_article_list (url) {
   });
   
   feedparser.on('readable', function () {
-    count++
-    if(count%10==0) my_emitter.emit('enought_data')
     var stream = this; // `this` is `feedparser`, which is a stream
     var item;
   

@@ -34,7 +34,6 @@ function get_full_content (guid) {
                 $ = cheerio.load(html, {decodeEntities: false})
                 
                 let content = $('#endText').html().trim()
-                // save_content_to_database(1, content)
                 resolve(content)
             } else {
                 let errReason = 'reject full content request, guid: ' + guid + ' err: ' + err
@@ -44,11 +43,5 @@ function get_full_content (guid) {
     })
 
 }
-
-// var guid = 'http://news.163.com/14/0513/08/9S453V5B00014JB6.html'
-// // 调用返回的 Promise
-// get_full_content(guid).then((content)=>{
-//     save_content_to_database(1, content)
-// })
 
 module.exports = get_full_content

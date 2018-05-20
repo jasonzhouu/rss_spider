@@ -7,16 +7,12 @@
 var connection = require('./connection')
 var get_full_content = require('./get_full_content')
 
-// connection.connect()
-
 function saveContent(id, content, connection) {
     connection.query('UPDATE articles SET content = ? WHERE id = ?', [content, id], (err, res)=>{
         if(err) {
             console.log(err)
-            // throw err;
         }
-        // console.log('Last insert ID:', res.insertId);
-        console.log('Last insert item ID:', id);
+        console.log('Last insert item ID:', res.insertId);
     })
 }
 
@@ -27,7 +23,7 @@ function deleteItem(id) {
     })
 }
 
-function save_all_full_content () {
+function save_full_content () {
     connection.query('SELECT id, guid FROM articles WHERE content IS NULL', function(err, res){
         if(err) {
             console.log("select err", err)
@@ -46,9 +42,8 @@ function save_all_full_content () {
                     connection.query('UPDATE articles SET content = ? WHERE id = ?', [content, id], (err, res)=>{
                         if(err) {
                             console.log("update err", err)
-                            // throw err;
                         }
-                        console.log('Last insert ID:', id)
+                        console.log('Last insert full content ID:', id)
                     })
                 }
             }).catch((reason)=>{
@@ -59,4 +54,4 @@ function save_all_full_content () {
     })
 }
 
-module.exports = save_all_full_content
+module.exports = save_full_content
