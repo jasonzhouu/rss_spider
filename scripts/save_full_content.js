@@ -12,14 +12,14 @@ function saveContent(id, content) {
         if(err) {
             console.log("update err", err)
         }
-        console.log('Last insert full content ID:', res.insertId);
+        console.log('save full content ID:', id);
     })
 }
 
 function deleteItem(id) {
     connection.query('DELETE FROM articles WHERE id = ?', id, (err, res)=>{
         if(err) console.log(err)
-        // console.log('delete item whose content is null, id: ', id)
+        console.log('delete empty content id: ', id)
     })
 }
 
@@ -28,10 +28,12 @@ function save_full_content () {
         if(err) {
             console.log("select err", err)
         }
+        // 遍历所有没有 content 的行
         for (var key in res) {
             let id = res[key].id
             let guid = res[key].guid
             get_full_content(guid).then((content)=>{
+                console.log('get new article id: ', id)
                 // resolve result
                 // if content.length is too short, it means the content is not proper or is empty
                 if(content.length<1000) {
