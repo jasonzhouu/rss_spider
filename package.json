@@ -7,7 +7,9 @@
     "express": "^4.16.3",
     "feedparser": "^2.2.9",
     "mysql": "^2.15.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "iconv-lite": "latest",
+    "cheerio": "latest"
   },
   "devDependencies": {},
   "scripts": {
