@@ -33,7 +33,7 @@ function save_full_content () {
             let id = res[key].id
             let guid = res[key].guid
             get_full_content(guid).then((content)=>{
-                console.log('get new article id: ', id)
+                // console.log('get new article id: ', id)
                 // resolve result
                 // if content.length is too short, it means the content is not proper or is empty
                 if(content.length<1000) {
