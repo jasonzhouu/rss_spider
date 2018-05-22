@@ -18,6 +18,7 @@ var headers = {
  * 返回 Promise(content)
  */
 function get_full_content (guid) {
+    console.log('start getting article content')
     uri = guid.slice(0, -5).concat('_all.html')
 
     return new Promise((resolve, reject) => {
