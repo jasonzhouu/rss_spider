@@ -45,11 +45,12 @@ function save_full_content () {
                     saveContent(id, content)
                 }
             }).catch((reason)=>{
+                console.log(reason)
                 deleteItem(id)
-                // console.log(reason)
             })
         }
     })
 }
 
+save_full_content()
 module.exports = save_full_content

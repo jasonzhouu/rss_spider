@@ -33,7 +33,8 @@ function get_full_content (guid) {
                 // 解析返回的 html
                 console.log("获取全文 uri = ", uri)
                 let content = pick_content(guid, body)
-                resolve(content)
+                if(content) resolve(content)
+                else reject('在全文网站没有获取文章')
             } else {
                 let errReason = 'reject full content request, uri: ' + uri + ' err: ' + err
                 reject(errReason)
@@ -70,26 +71,30 @@ function pick_content(guid, body) {
     switch (ft_or_163(guid)) {
         case 'ft':
             $ = cheerio.load(body, {decodeEntities: false})
-            content = $('#story-body-container').html().trim()
+            content = $('#story-body-container').html()
             break
         case '163':
             html = iconv.decode(body, 'gb2312')
             $ = cheerio.load(html, {decodeEntities: false})
-            content = $('#endText').html().trim()
+            content = $('#endText').html()
             break
         default:
             console.log('pick content error')
             break
     }
-    return content
+    if(content != null) {
+        content = content.trim()
+        if(content.length > 1000) return content
+        else return false;
+    }
 }
 
-var guid = 
-"http://news.163.com/14/1203/13/ACHV7S6C00014JB6.html"
-// "http://www.ftchinese.com/story/001077660"
+// var guid = 
+// "http://news.163.com/14/1203/13/ACHV7S6C00014JB6.html"
+// // "http://www.ftchinese.com/story/001077660"
 
-get_full_content(guid).then((content)=>{
-    console.log("全文: ", content)
-})
+// get_full_content(guid).then((content)=>{
+//     console.log("全文: ", content)
+// })
 
 module.exports = get_full_content

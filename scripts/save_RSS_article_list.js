@@ -81,19 +81,4 @@ function save_RSS_article_list (url) {
   })
 }
 
-function iteralte_all_rss(url_array) {
-  url_array.forEach((url, index, array) => {
-    save_RSS_article_list(url)
-  })
-}
-
-url_array = [
-  "http://news.163.com/special/00011K6L/rss_newstop.xml", //163 rss 源
-  "http://www.ftchinese.com/rss/news",                    // FT 中文 RSS 源 ------今日焦点
-  "http://www.ftchinese.com/rss/feed",                    // FT 中文 RSS 源 ------每日更新
-  "http://www.ftchinese.com/rss/hotstoryby7day",          // FT 中文 RSS 源 ------十大热门文章
-]
-
-iteralte_all_rss(url_array)
-
 module.exports = save_RSS_article_list
