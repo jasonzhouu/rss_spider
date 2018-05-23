@@ -1,13 +1,14 @@
 var connection = require('./connection')
 var save_RSS_article_list = require('./save_RSS_article_list')
-var countdownInterval, time_per_round = 60
-connection.connect()
+var countdownInterval, time_per_round = 60 * 10
+// connection.connect()
 
 url_array = [
     "http://news.163.com/special/00011K6L/rss_newstop.xml", //163 rss 源
     "http://www.ftchinese.com/rss/news",                    // FT 中文 RSS 源 ------今日焦点
     "http://www.ftchinese.com/rss/feed",                    // FT 中文 RSS 源 ------每日更新
     "http://www.ftchinese.com/rss/hotstoryby7day",          // FT 中文 RSS 源 ------十大热门文章
+    "http://www.xinhuanet.com/politics/news_politics.xml",  //新华网
 ]
 
 function iteralte_all_rss(url_array) {
@@ -17,9 +18,9 @@ function iteralte_all_rss(url_array) {
 }
 
 function countdown(time_per_round) {
-    console.log('time remain: ', time_per_round, ' seconds')
+    console.log('距离下一次 RSS 请求还有 : ', time_per_round, ' 秒')
     countdownInterval = setInterval(()=>{
-        console.log('time remain: ', --time_per_round, ' seconds')
+        console.log('距离下一次 RSS 请求还有 : ', --time_per_round, ' 秒')
         if (time_per_round == 0) {
             clearInterval(countdownInterval)
         }
@@ -33,7 +34,7 @@ function new_around() {
     iteralte_all_rss(url_array)
 }
 
-console.log('start running...')
+console.log('开始运行...')
 
 new_around()
 setInterval(new_around, time_per_round*1000)

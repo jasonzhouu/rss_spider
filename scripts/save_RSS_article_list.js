@@ -6,14 +6,19 @@ var FeedParser = require('feedparser')
 var request = require('request')
 var my_emitter = require('./my_emitter')
 var connection = require('./connection')
+connection.connect()
 
 function save_article_to_database(article) {
   connection.query('INSERT INTO articles SET ?', article, (err, res) => {
     if(err) throw err;
-    //输出插入结果
-    console.log('Last insert item ID:', res.insertId)
-    console.clear()
-    // my_emitter.emit('new_article')
+    console.log(`\n\n ============================ ${++count}: RSS 获取到 ${item.guid} =============================== \n\n`)
+    // console.log(item)
+    console.log("全文链接: ", item.guid)
+    // console.log("发表于: ", item.pubdate)
+    console.log("非全文的字符长度: ", item.description)
+    console.log('插入行 ID:', res.insertId)
+    // console.clear()
+    my_emitter.emit('new_article')
   })
 }
 
@@ -32,6 +37,7 @@ function check_and_save(article) {
 function save_RSS_article_list (url) {
   var req = request(url)
   var feedparser = new FeedParser()
+  let count = 0
   
   req.on('error', function (error) {
     // handle any request errors
@@ -59,26 +65,31 @@ function save_RSS_article_list (url) {
     while (item = stream.read()) {
       let newDate = new Date()
       let timestamp = newDate.toLocaleDateString()
-      
+
+      console.log(`============= 获取到第 ${++count} 篇 RSS 文章: ${item.guid} =============`)
+
+      // for(var key in item) console.log(key)
+
+      if(item.description == null) return
+
       //  article object 是数据库存数据的配置
       let article = {
         title: item.title,
         description: item.description,
-        content: null,
-        publish_time: item.pubdate,
+        content: item.content,
+        publish_time: item.pubdate || '****/**/**',
         publish_source: item.source,
         guid: item.guid,
         created_at: timestamp,
       }
-
-      console.log("\n\n =============================================================== \n\n")
-      console.log("全文链接: ", item.guid)
-      console.log("发表于: ", item.pubdate)
-      console.log("article length: ", item.description.length)
       
       check_and_save(article)
     }
   })
 }
+
+// url = "http://www.xinhuanet.com/politics/news_politics.xml",  //新华网
+
+// save_RSS_article_list(url)
 
 module.exports = save_RSS_article_list

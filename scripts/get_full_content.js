@@ -18,7 +18,7 @@ var headers = {
  * 返回 Promise(content)
  */
 function get_full_content (guid) {
-    console.log("\n\n =============================================================== \n\n")
+    console.log(`\n\n ===========================抓取全文 ${guid}==================================== \n\n`)
     var uri = full_content_uri(guid)
 
     return new Promise((resolve, reject) => {
@@ -31,12 +31,11 @@ function get_full_content (guid) {
         }, function(err, res, body) {
             if(!err && res.statusCode == 200){
                 // 解析返回的 html
-                console.log("获取全文 uri = ", uri)
+                console.log("获取到全文 uri = ", uri)
                 let content = pick_content(guid, body)
-                if(content) resolve(content)
-                else reject('在全文网站没有获取文章')
+                resolve(content)
             } else {
-                let errReason = 'reject full content request, uri: ' + uri + ' err: ' + err
+                let errReason = '访问网页请求被拒, uri: ' + uri + ' err: ' + err
                 reject(errReason)
             }
         })
@@ -48,6 +47,9 @@ function ft_or_163(guid) {
         return 'ft'
     else if(guid.slice(0, 20) == 'http://news.163.com/')
         return '163'
+    else if(guid.slice(0, 25) == 'http://www.xinhuanet.com/')
+        return 'xinhua'
+    else return false
 }
 
 function full_content_uri(guid) {
@@ -59,6 +61,9 @@ function full_content_uri(guid) {
         case '163':
             uri = guid.slice(0, -5).concat('_all.html')
             break
+        case 'xinhua':
+            uri = guid
+            break
         default:
             console.log('guid error')
             break
@@ -67,7 +72,7 @@ function full_content_uri(guid) {
 }
 
 function pick_content(guid, body) {
-    let content
+    let content, html
     switch (ft_or_163(guid)) {
         case 'ft':
             $ = cheerio.load(body, {decodeEntities: false})
@@ -78,23 +83,25 @@ function pick_content(guid, body) {
             $ = cheerio.load(html, {decodeEntities: false})
             content = $('#endText').html()
             break
+        case 'xinhua':
+            $ = cheerio.load(body, {decodeEntities: false})
+            content = $('#p-detail').html()
+            break
         default:
             console.log('pick content error')
             break
     }
     if(content != null) {
         content = content.trim()
-        if(content.length > 1000) return content
-        else return false;
+    return content
     }
 }
 
-// var guid = 
-// "http://news.163.com/14/1203/13/ACHV7S6C00014JB6.html"
-// // "http://www.ftchinese.com/story/001077660"
+// guid =
+// "http://www.xinhuanet.com/politics/2018-05/23/c_1122876162.htm"
 
 // get_full_content(guid).then((content)=>{
-//     console.log("全文: ", content)
+//     console.log("content: ", content)
 // })
 
 module.exports = get_full_content
