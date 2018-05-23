@@ -13,7 +13,7 @@ function save_article_to_database(article) {
     //输出插入结果
     console.log('Last insert item ID:', res.insertId)
     console.clear()
-    my_emitter.emit('new_article')
+    // my_emitter.emit('new_article')
   })
 }
 
@@ -70,10 +70,30 @@ function save_RSS_article_list (url) {
         guid: item.guid,
         created_at: timestamp,
       }
+
+      console.log("\n\n =============================================================== \n\n")
+      console.log("全文链接: ", item.guid)
+      console.log("发表于: ", item.pubdate)
+      console.log("article length: ", item.description.length)
       
       check_and_save(article)
     }
   })
 }
+
+function iteralte_all_rss(url_array) {
+  url_array.forEach((url, index, array) => {
+    save_RSS_article_list(url)
+  })
+}
+
+url_array = [
+  "http://news.163.com/special/00011K6L/rss_newstop.xml", //163 rss 源
+  "http://www.ftchinese.com/rss/news",                    // FT 中文 RSS 源 ------今日焦点
+  "http://www.ftchinese.com/rss/feed",                    // FT 中文 RSS 源 ------每日更新
+  "http://www.ftchinese.com/rss/hotstoryby7day",          // FT 中文 RSS 源 ------十大热门文章
+]
+
+iteralte_all_rss(url_array)
 
 module.exports = save_RSS_article_list

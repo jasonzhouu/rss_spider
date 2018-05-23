@@ -57,6 +57,6 @@ function save_RSS_article_list (url) {
 url_array = [
     "http://www.ftchinese.com/rss/news",
     "http://www.ftchinese.com/rss/feed",
-    "http://www.ftchinese.com/rss/hotstoryby7day"
+    "http://www.ftchinese.com/rss/hotstoryby7day",
 ]
 save_RSS_article_list(url_array[url_array.length - 1])
