@@ -6,13 +6,15 @@
 
 var connection = require('./connection')
 var get_full_content = require('./get_full_content')
+// const { spawn } = require('child_process')
 
 function saveContent(id, content) {
     connection.query('UPDATE articles SET content = ? WHERE id = ?', [content, id], (err, res)=>{
         if(err) {
             console.log("update err", err)
         }
-        console.log('save full content ID:', id);
+        console.log('save full content ID:', id)
+        // var pythonProcess = spawn('python',["../../content-analysis/TopControl.py"])
     })
 }
 
