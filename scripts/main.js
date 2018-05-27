@@ -1,7 +1,8 @@
 var connection = require('./connection')
 var save_RSS_article_list = require('./save_RSS_article_list')
-var countdownInterval, time_per_round = 60 * 10
-// connection.connect()
+var countdownInterval
+const time_per_round = 60 * 10 // 10分钟抓取一次
+connection.connect()
 
 url_array = [
     "http://news.163.com/special/00011K6L/rss_newstop.xml", //163 rss 源
@@ -17,11 +18,11 @@ function iteralte_all_rss(url_array) {
     })
 }
 
-function countdown(time_per_round) {
-    console.log('距离下一次 RSS 请求还有 : ', time_per_round, ' 秒')
+function countdown(cycle) {
+    console.log('距离下一次 RSS 请求还有 : ', cycle, ' 秒')
     countdownInterval = setInterval(()=>{
-        console.log('距离下一次 RSS 请求还有 : ', --time_per_round, ' 秒')
-        if (time_per_round == 0) {
+        console.log('距离下一次 RSS 请求还有 : ', --cycle, ' 秒')
+        if (cycle == 0) {
             clearInterval(countdownInterval)
         }
     }, 1000)

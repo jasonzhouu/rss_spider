@@ -6,30 +6,25 @@ var FeedParser = require('feedparser')
 var request = require('request')
 var my_emitter = require('./my_emitter')
 var connection = require('./connection')
-connection.connect()
+// connection.connect()
 
-function save_article_to_database(article) {
+function save_article_to_database(article, count) {
   connection.query('INSERT INTO articles SET ?', article, (err, res) => {
     if(err) throw err;
-    console.log(`\n\n ============================ ${++count}: RSS 获取到 ${item.guid} =============================== \n\n`)
-    // console.log(item)
-    console.log("全文链接: ", item.guid)
-    // console.log("发表于: ", item.pubdate)
-    console.log("非全文的字符长度: ", item.description)
+    console.log(`\n\n ============================  保存到数据库：获取到的第 ${count} RSS 文章 =============================== \n\n`)
     console.log('插入行 ID:', res.insertId)
-    // console.clear()
     my_emitter.emit('new_article')
   })
 }
 
-function check_and_save(article) {
+function check_and_save(article, count) {
   connection.query('select id from articles where guid = ?', article.guid, (err, res)=>{
     // if exists
     if(res[0]) {
       // console.log(`${res[0].id} article already exists`)
     }
     // if not exists
-    else save_article_to_database(article)
+    else save_article_to_database(article, count)
   })  
 }
 
@@ -83,7 +78,7 @@ function save_RSS_article_list (url) {
         created_at: timestamp,
       }
       
-      check_and_save(article)
+      check_and_save(article, count)
     }
   })
 }
