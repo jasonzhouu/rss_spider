@@ -34,10 +34,7 @@ function three_oclock() {
     let localtime = now.toLocaleTimeString()
     let hour = localtime.slice(0,2)*1 //获取当前的小时
     let minute = localtime.slice(3,5)*1 //获取当前的分钟
-    if(process.argv[2] == "now"){
-        console.log("analyze articles now")
-        exec_python()
-    } else if(hour == 3 && minute <= 10){
+    if(hour == 3 && minute <= 10){
         console.log("it's time to analyze articles")
         exec_python()
     } else {
@@ -54,6 +51,11 @@ function new_around() {
 }
 
 console.log('开始运行...')
+
+if(process.argv[2] == "now"){
+    console.log("analyze articles now")
+    exec_python()
+}
 
 new_around()
 setInterval(new_around, time_per_round*1000)
