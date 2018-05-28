@@ -34,9 +34,14 @@ function three_oclock() {
     let localtime = now.toLocaleTimeString()
     let hour = localtime.slice(0,2)*1 //获取当前的小时
     let minute = localtime.slice(3,5)*1 //获取当前的分钟
-    if (hour == 3 && minute <=10) {
-        console.log("\n==================================\n     it's time to execute python file \n==================================\n")
+    if(process.argv[2] == "now"){
+        console.log("analyze articles now")
         exec_python()
+    } else if(hour == 3 && minute <= 10){
+        console.log("it's time to analyze articles")
+        exec_python()
+    } else {
+        console.log("it's not time to ananlyze articles")
     }
 }
 
