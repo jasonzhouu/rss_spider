@@ -13,7 +13,7 @@ function saveContent(id, content) {
         if(err) {
             console.log("update err", err)
         }
-        console.log(`保存 id = ${id} 的全文`)
+        console.log(`===========================保存 id = ${id} 的全文===========================`)
         // var pythonProcess = spawn('python',["../../content-analysis/TopControl.py"])
     })
 }
