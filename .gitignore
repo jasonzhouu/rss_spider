@@ -1,2 +1,3 @@
 node_modules
 scripts/setting.json
+scripts/__pycache__
