@@ -12,7 +12,7 @@ url_array = [
     "http://www.xinhuanet.com/politics/news_politics.xml",  //新华网
 ]
 
-function iteralte_all_rss(url_array) {
+function iterate_all_rss(url_array) {
     url_array.forEach((url, index, array) => {
         save_RSS_article_list(url)
     })
@@ -28,11 +28,22 @@ function countdown(cycle) {
     }, 1000)
 }
 
+function three_oclock() {
+    let now = new Date()
+    let localtime = now.toLocaleTimeString 
+    let hour = localtime.slice(0,2)*1 //获取当前的小时
+    let minute = localtime.slice(3,5)*1 //获取当前的分钟
+    if (hour == 3 && minute <=10) {
+        console.log("\n==================================\n it's time to execute python file \n==================================\n")
+    }
+}
+
 function new_around() {
     console.log('\n ================= \n    new around    \n ================= \n')
+    three_oclock()
     clearInterval(countdownInterval)
     countdown(time_per_round)
-    iteralte_all_rss(url_array)
+    iterate_all_rss(url_array)
 }
 
 console.log('开始运行...')
