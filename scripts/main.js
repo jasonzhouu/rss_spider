@@ -1,5 +1,6 @@
 var connection = require('./connection')
 var save_RSS_article_list = require('./save_RSS_article_list')
+var exec_python = require('./exec_python')
 var countdownInterval
 const time_per_round = 60 * 10 // 10分钟抓取一次
 connection.connect()
@@ -30,11 +31,12 @@ function countdown(cycle) {
 
 function three_oclock() {
     let now = new Date()
-    let localtime = now.toLocaleTimeString 
+    let localtime = now.toLocaleTimeString()
     let hour = localtime.slice(0,2)*1 //获取当前的小时
     let minute = localtime.slice(3,5)*1 //获取当前的分钟
     if (hour == 3 && minute <=10) {
-        console.log("\n==================================\n it's time to execute python file \n==================================\n")
+        console.log("\n==================================\n     it's time to execute python file \n==================================\n")
+        exec_python()
     }
 }
 
