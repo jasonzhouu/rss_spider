@@ -87,13 +87,14 @@ if __name__ == '__main__':
     recommend_result = recommend_result.sort_values(by='similarity', ascending=False)
 
     # write recommend result to database
+    caculate_hash = hash(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     for index, row in recommend_result.iterrows():
         user_id = "1"
         article_id = row.newsid
         similarity = str(row.similarity)
         created_at = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        sql = "INSERT INTO recommend_articles (article_id, user_id, similarity, created_at) VALUES ('" + article_id + "', '" + user_id + "', '" + similarity + "', '" + created_at + "');"
+        sql = "INSERT INTO recommend_articles (article_id, user_id, similarity, caculate_hash, have_loaded_before, created_at) VALUES ('" + article_id + "', '" + user_id + "', '" + similarity + "', '" + caculate_hash + "', 'false', '" + created_at + "');"
         my_engine.execute_sql(sql, commit=True)
 
         recommend_result.drop(recommend_result.index, inplace=True)
