@@ -28,6 +28,8 @@ if __name__ == '__main__':
     sql = "SELECT id, title, content FROM articles WHERE created_at BETWEEN " + "'" + yesterday + "' AND " + "'" + now_date + "';"
     lines = my_engine.execute_sql(sql)
 
+    print("\n======================== \n    读取文章 " + str(len(lines)) + " 篇\n======================== \n")
+
     update_news = pd.DataFrame()  # store update news
     for line in lines:
         # clean news content
