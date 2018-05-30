@@ -6,7 +6,6 @@
 
 var connection = require('./connection')
 var get_full_content = require('./get_full_content')
-// const { spawn } = require('child_process')
 
 function saveContent(id, content) {
     connection.query('UPDATE articles SET content = ? WHERE id = ?', [content, id], (err, res)=>{
@@ -14,7 +13,6 @@ function saveContent(id, content) {
             console.log("update err", err)
         }
         console.log(`===========================保存 id = ${id} 的全文===========================`)
-        // var pythonProcess = spawn('python',["../../content-analysis/TopControl.py"])
     })
 }
 
@@ -48,7 +46,7 @@ function save_full_content () {
                     saveContent(id, content)
                 }
             }).catch((reason)=>{
-                console.log(reason)
+                console.log('获取全文出错', reason)
                 deleteItem(id)
             })
         }

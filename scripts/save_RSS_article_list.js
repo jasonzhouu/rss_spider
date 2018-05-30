@@ -59,7 +59,7 @@ function save_RSS_article_list (url) {
   
     while (item = stream.read()) {
       let newDate = new Date()
-      let timestamp = newDate.toLocaleDateString()
+      let timestamp = newDate.toLocaleString()
 
       console.log(`============= 获取到第 ${++count} 篇 RSS 文章: ${item.guid} =============`)
 
