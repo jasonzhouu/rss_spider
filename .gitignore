@@ -1,3 +1,4 @@
 node_modules
 scripts/setting.json
 scripts/__pycache__
+.vscode
