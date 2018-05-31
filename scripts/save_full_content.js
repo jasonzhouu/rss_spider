@@ -12,7 +12,7 @@ function saveContent(id, content) {
         if(err) {
             console.log("update err", err)
         }
-        console.log(`===========================保存 id = ${id} 的全文===========================`)
+        console.log(`=========================== id = ${id} 的全文成功保存到数据库 ===========================`)
     })
 }
 

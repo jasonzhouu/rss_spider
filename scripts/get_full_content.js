@@ -18,7 +18,7 @@ var headers = {
  * 返回 Promise(content)
  */
 function get_full_content (guid) {
-    console.log(`\n\n ===========================抓取全文 ${guid}==================================== \n\n`)
+    // console.log(`\n\n ===========================开始抓取全文 ${guid}==================================== \n\n`)
     var uri = full_content_uri(guid)
 
     return new Promise((resolve, reject) => {
