@@ -24,8 +24,9 @@ if __name__ == '__main__':
     now_date = datetime.datetime.now().strftime("%Y-%m-%d") + " 03:00:00"
     yesterday = datetime.datetime.now() - datetime.timedelta(1)
     yesterday = yesterday.strftime("%Y-%m-%d") + " 03:00:00"
+    now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    sql = "SELECT id, title, content FROM articles WHERE created_at BETWEEN " + "'" + yesterday + "' AND " + "'" + now_date + "';"
+    sql = "SELECT id, title, content FROM articles WHERE created_at BETWEEN " + "'" + yesterday + "' AND " + "'" + now_time + "';"
     lines = my_engine.execute_sql(sql)
 
     print("\n======================== \n    读取文章 " + str(len(lines)) + " 篇\n======================== \n")
