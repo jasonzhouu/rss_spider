@@ -12,7 +12,8 @@ function save_article_to_database(article, count) {
   connection.query('INSERT INTO articles SET ?', article, (err, res) => {
     if(err) throw err;
     console.log(`\n\n ============================  保存到数据库：获取到的第 ${count} RSS 文章 =============================== \n\n`)
-    console.log('插入行 ID:', res.insertId)
+      console.log('插入行 ID:', res.insertId)
+      if(article.guid.slice(0,15) == 'http://36kr.com') return
     my_emitter.emit('new_article')
   })
 }
@@ -77,6 +78,10 @@ function save_RSS_article_list (url) {
         guid: item.guid,
         created_at: timestamp,
       }
+
+        if(url == "http://36kr.com/feed") {
+            article.content = item.description
+        }
       
       check_and_save(article, count)
     }

@@ -2,6 +2,7 @@
  * 将数据库中 content = null 的项目查找全文
  * 将符合要求的全文保存到数据库
  * 不符合要求的删除这一行
+ * @TODO 从每个域名上获取全文设置一定间隔
  */
 
 var connection = require('./connection')
